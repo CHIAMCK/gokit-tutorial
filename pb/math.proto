@@ -1,0 +1,38 @@
+syntax = "proto3"; // version 3
+
+// The name and import path for this package is specified with the go_package proto option
+option go_package = "github.com/CHIAMCK/gokit-tutorial/pb";
+
+service MathService {
+  rpc Add(MathRequest) returns (MathResponse) {}
+}
+
+message MathRequest {
+  float numA = 1;
+  float numB = 2;
+}
+
+message MathResponse {
+  float result = 1;
+}
+
+// protoc --> google protocol buffer compiler with a special gRPC Go plugin
+// protoc --go-grpc_out==plugins=grpc:pb/ pb/math.proto
+// https://grpc.io/docs/languages/go/basics/
+
+
+
+// If the paths=source_relative flag is specified,
+// the output file is placed in the same relative directory as the input file
+
+// The argument to the go_out flag is the directory where you want the compiler to write your Go output.
+
+// Flags specific to protoc-gen-go are provided by passing a go_opt flag
+
+// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=.
+--go-grpc_opt=paths=source_relative math.proto
+
+// will generate 2 files
+// xxx.pb file --> contains all the protocol buffer code to populate, serialize and retrieve request and response message types
+// xxx_grpc.pb file --> contain an interface type (or stub) for clients to call with the methods defined in the proto file
+// --> an interface type for servers to implement, also with the methods defined in the proto service
